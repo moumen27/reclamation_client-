@@ -3,8 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Lock, ArrowRight, CheckCircle, Eye, EyeOff } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { API_URL } from '../config/api';
 
-const API_URL = 'http://localhost:5000/api/auth';
+const API_AUTH_URL = `${API_URL}/auth`;
 
 const ResetPassword = () => {
   const { token } = useParams();
@@ -33,7 +34,7 @@ const ResetPassword = () => {
     setLoading(true);
 
     try {
-      const res = await fetch(`${API_URL}/resetpassword/${token}`, {
+      const res = await fetch(`${API_AUTH_URL}/resetpassword/${token}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password })

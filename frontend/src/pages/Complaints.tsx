@@ -29,15 +29,10 @@ const translateStatus = (status, t) => {
   return map[status] ? t(`statuts.${map[status]}`) : status;
 };
 
-const API_URL = 'http://localhost:5000/api/complaints';
+import { API_URL as BASE_API_URL, getUploadUrl } from '../config/api';
 
-const getFileUrl = (path) => {
-  if (!path) return '';
-  if (path.startsWith('http') || path.startsWith('data:')) return path;
-  if (path.startsWith('/uploads/')) return `http://localhost:5000${path}`;
-  if (path.startsWith('/')) return `http://localhost:5000${path}`;
-  return `http://localhost:5000/uploads/${path}`;
-};
+const API_URL = `${BASE_API_URL}/complaints`;
+const getFileUrl = getUploadUrl;
 
 /* ------------------------------------------------------------------ */
 /*  TIMELINE COMPONENT (client complaint tracking)                      */

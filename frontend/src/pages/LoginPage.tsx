@@ -6,8 +6,9 @@ import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../components/LanguageSwitcher';
 import { useAuthStore } from '../store/authStore';
 import AddressAutocomplete from '../components/AddressAutocomplete';
+import { API_URL } from '../config/api';
 
-const API_URL = 'http://localhost:5000/api/auth';
+const AUTH_URL = `${API_URL}/auth`;
 
 const LoginPage = () => {
   const { t, i18n } = useTranslation();
@@ -39,7 +40,7 @@ const LoginPage = () => {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch(`${API_URL}/login`, {
+      const res = await fetch(`${AUTH_URL}/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(loginData)
@@ -110,7 +111,7 @@ const LoginPage = () => {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch(`${API_URL}/register`, {
+      const res = await fetch(`${AUTH_URL}/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(registerData)
@@ -136,7 +137,7 @@ const LoginPage = () => {
     if (!forgotEmail) return;
     setForgotLoading(true);
     try {
-      const res = await fetch(`${API_URL}/forgotpassword`, {
+      const res = await fetch(`${AUTH_URL}/forgotpassword`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: forgotEmail })

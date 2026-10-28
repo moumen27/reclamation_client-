@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { API_URL } from '../config/api';
 
 export interface User {
   _id: string;
@@ -33,7 +34,7 @@ export const useAuthStore = create<AuthState>()(
            const parsed = JSON.parse(localStorage.getItem('auth-storage') || '{}');
            const token = parsed?.state?.user?.token;
            if(token) {
-               fetch('http://localhost:5000/api/auth/logout', {
+               fetch(`${API_URL}/auth/logout`, {
                    method: 'POST',
                    headers: {
                        'Authorization': `Bearer ${token}`

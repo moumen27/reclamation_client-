@@ -29,11 +29,34 @@ const server = http.createServer(app);
 initSocket(server);
 
 // Security Middleware
-app.use(helmet());
+app.use(helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" }
+}));
 
 // CORS Configuration
+const allowedOrigins = [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    ...(process.env.CLIENT_URL ? process.env.CLIENT_URL.split(',').map(url => url.trim().replace(/\/$/, '')) : [])
+];
+
 const corsOptions = {
-    origin: process.env.NODE_ENV === 'production' ? 'https://votre-domaine-production.com' : 'http://localhost:5173',
+    origin: (origin, callback) => {
+        if (!origin) return callback(null, true);
+        if (process.env.NODE_ENV !== 'production') return callback(null, true);
+        if (allowedOrigins.length === 0 || allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+        const cleanOrigin = origin.replace(/\/$/, '');
+        if (allowedOrigins.some(o => o === cleanOrigin)) {
+            return callback(null, true);
+        }
+        // Autorise les domaines Vercel (.vercel.app)
+        if (origin.endsWith('.vercel.app')) {
+            return callback(null, true);
+        }
+        return callback(null, true);
+    },
     credentials: true,
     optionsSuccessStatus: 200
 };

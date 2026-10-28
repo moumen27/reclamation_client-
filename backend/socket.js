@@ -5,7 +5,10 @@ let io;
 const initSocket = (server) => {
     io = new Server(server, {
         cors: {
-            origin: process.env.NODE_ENV === 'production' ? 'https://votre-domaine-production.com' : 'http://localhost:5173',
+            origin: (origin, callback) => {
+                // Allow connected clients
+                callback(null, true);
+            },
             methods: ['GET', 'POST'],
             credentials: true,
         }

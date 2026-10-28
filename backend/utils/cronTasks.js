@@ -1,6 +1,11 @@
 const cron = require('node-cron');
 const Complaint = require('../models/Complaint');
 
+const getAIBaseUrl = () => {
+    const raw = process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000';
+    return raw.replace(/\/predict\/?$/, '').replace(/\/$/, '');
+};
+
 const startCronJobs = () => {
     // Tâche planifiée pour s'exécuter tous les jours à 2h00 du matin ('0 2 * * *')
     cron.schedule('0 2 * * *', async () => {
@@ -19,7 +24,7 @@ const startCronJobs = () => {
                 category: c.type
             }));
 
-            const response = await fetch('http://127.0.0.1:8000/retrain', {
+            const response = await fetch(`${getAIBaseUrl()}/retrain`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
